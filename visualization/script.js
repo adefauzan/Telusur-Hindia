@@ -38,7 +38,7 @@ const DATA_SOURCES = [
     {
         id: 'pertama',
         label: 'Buitenzorg_1921',
-        url: 'https://raw.githubusercontent.com/adefauzan/CTAID/main/database/Buitenzorg_1921.geojson',
+        url: 'https://raw.githubusercontent.com/adefauzan/Telusur-Hindia/main/database/Buitenzorg_1921.geojson',
         active: true // Layer ini akan langsung tampil saat load
     },
     // Contoh jika nanti ada file kedua (hapus komentar untuk mencoba jika ada file-nya)
