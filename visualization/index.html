@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telusur Hindia - Heritage Portal</title>
+    <title>Telusur Hindia - Portal Cagar Budaya</title>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -15,14 +15,15 @@
             --primary-color: #1a2b3c;
             --accent-color: #c0392b;
             --border-color: rgba(0, 0, 0, 0.1);
-            --sidebar-bg: rgba(255, 255, 255, 0.85); /* Opacity 85% */
+            --sidebar-bg: rgba(255, 255, 255, 0.85); /* Transparansi 85% */
             --body-bg: #f5f7f9;
             --text-main: #2c3e50;
             --text-muted: #7f8c8d;
             --sidebar-width: 320px;
-            --glass-blur: blur(10px); /* Efek blur kaca */
+            --glass-blur: blur(12px);
         }
 
+        /* Dasar & Tipografi */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Quicksand', sans-serif; 
@@ -34,7 +35,7 @@
             color: var(--text-main);
         }
 
-        /* Timeline Bar Transparan 85% */
+        /* --- Bilah Garis Waktu (Atas) --- */
         .timeline-bar {
             background-color: var(--sidebar-bg);
             backdrop-filter: var(--glass-blur);
@@ -66,8 +67,8 @@
             align-items: center;
             color: var(--primary-color);
         }
-        .era-td { width: 48.1%; }
-        .era-dw { width: 51.9%; }
+        .era-td { width: 48.1%; } /* Representasi visual 1864-1903 */
+        .era-dw { width: 51.9%; } /* Representasi visual 1903-1945 */
 
         .slider-container {
             width: 100%;
@@ -75,6 +76,7 @@
             padding-top: 10px;
         }
 
+        /* Garis skala waktu (Ticks) */
         .timeline-ticks {
             position: absolute;
             top: 20px;
@@ -92,11 +94,12 @@
             background-color: rgba(0, 0, 0, 0.1);
         }
         .tick.major {
-            height: 140%;
-            background-color: rgba(0, 0, 0, 0.2);
+            height: 150%;
+            background-color: rgba(0, 0, 0, 0.25);
             width: 2px;
         }
 
+        /* Slider Input */
         .year-slider {
             width: 100%;
             -webkit-appearance: none;
@@ -119,6 +122,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        /* Indikator Tahun Melayang */
         .year-indicator-floating {
             position: absolute;
             top: -42px;
@@ -130,7 +134,7 @@
             font-weight: 700;
             font-size: 13px;
             pointer-events: none;
-            box-shadow: 0 4px 8px rgba(192, 57, 43, 0.3);
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.4);
             z-index: 10;
         }
         .year-indicator-floating::after {
@@ -153,7 +157,7 @@
             color: var(--text-muted);
         }
 
-        /* Layout Utama */
+        /* --- Tata Letak Utama --- */
         .main-container { 
             display: flex; 
             flex: 1; 
@@ -161,7 +165,7 @@
             overflow: hidden;
         }
 
-        /* Sidebar Transparan 85% */
+        /* Sidebar Transparan */
         .sidebar { 
             width: var(--sidebar-width); 
             background-color: var(--sidebar-bg);
@@ -171,7 +175,7 @@
             z-index: 999; 
             display: flex; 
             flex-direction: column; 
-            transition: transform 0.3s ease, margin-left 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
@@ -186,8 +190,8 @@
             min-width: var(--sidebar-width);
         }
 
-        .sidebar-header h1 { font-size: 24px; font-weight: 800; color: var(--primary-color); margin-bottom: 8px; opacity: 1; }
-        .sidebar-header p.desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; font-weight: 600; opacity: 1; }
+        .sidebar-header h1 { font-size: 26px; font-weight: 800; color: var(--primary-color); margin-bottom: 8px; }
+        .sidebar-header p.desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; font-weight: 600; }
 
         .sidebar-section { padding-top: 20px; border-top: 1px solid var(--border-color); margin-bottom: 20px; }
         .sidebar-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 14px; font-weight: 700; }
@@ -196,20 +200,20 @@
             width: 100%;
             padding: 12px 14px;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: rgba(255, 255, 255, 0.6); /* Lebih terang sedikit agar teks kontras */
+            background: rgba(255, 255, 255, 0.6);
             transition: all 0.2s ease;
         }
-        .search-input:focus { border-color: var(--accent-color); background: #fff; }
+        .search-input:focus { border-color: var(--accent-color); background: #fff; box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.1); }
 
         .filter-list { display: flex; flex-direction: column; gap: 10px; }
         .filter-item { display: flex; align-items: center; font-size: 14px; font-weight: 600; cursor: pointer; }
         .filter-item input { margin-right: 12px; width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; }
 
-        /* Sidebar Footer Transparan 85% */
+        /* Footer Sidebar (Navigasi) */
         .sidebar-footer {
             padding: 20px;
             background: rgba(255, 255, 255, 0.85);
@@ -228,12 +232,11 @@
             font-size: 14px;
             font-weight: 700;
             transition: all 0.2s;
-            opacity: 1; /* Teks tetap solid */
         }
-        .footer-link:hover { color: var(--accent-color); transform: translateX(3px); }
+        .footer-link:hover { color: var(--accent-color); transform: translateX(4px); }
         .footer-link svg { margin-right: 12px; width: 18px; height: 18px; fill: currentColor; }
 
-        /* Toggle Button */
+        /* Tombol Sembunyikan Panel (Tab Tengah) */
         #toggle-sidebar {
             position: absolute;
             left: 0;
@@ -244,26 +247,26 @@
             backdrop-filter: var(--glass-blur);
             border: 1px solid var(--border-color);
             border-left: none;
-            width: 20px;
-            height: 60px;
-            border-radius: 0 10px 10px 0;
+            width: 22px;
+            height: 70px;
+            border-radius: 0 12px 12px 0;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
             transition: all 0.2s;
             color: var(--text-muted);
         }
-        #toggle-sidebar:hover { background: #fff; color: var(--accent-color); width: 24px; }
-        #toggle-sidebar svg { width: 18px; height: 18px; fill: currentColor; transition: transform 0.3s; }
+        #toggle-sidebar:hover { background: #fff; color: var(--accent-color); width: 28px; }
+        #toggle-sidebar svg { width: 18px; height: 18px; fill: currentColor; transition: transform 0.4s; }
         .collapsed-state #toggle-sidebar svg { transform: rotate(180deg); }
 
-        /* Map */
+        /* Kontainer Peta */
         #map-container { flex: 1; position: relative; }
         #map { width: 100%; height: 100%; background-color: #f1f2f6; }
 
-        /* Popup */
+        /* Popup Info */
         .popup-title { font-weight: 700; font-size: 16px; color: var(--primary-color); margin-bottom: 8px; border-bottom: 3px solid var(--accent-color); display: inline-block; }
         .popup-table { width: 100%; font-size: 13px; border-collapse: collapse; }
         .popup-table td { padding: 6px 0; border-bottom: 1px solid #f1f2f6; }
@@ -291,7 +294,7 @@
     </div>
 
     <div class="main-container">
-        <!-- Sidebar -->
+        <!-- Sidebar Panel -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-content">
                 <div class="sidebar-header">
@@ -307,12 +310,11 @@
                 <div class="sidebar-section">
                     <h3>Kategori</h3>
                     <div id="filter-list" class="filter-list">
-                        <p style="font-size: 13px; color: var(--text-muted);">Menganalisis kategori...</p>
+                        <p style="font-size: 13px; color: var(--text-muted);">Menganalisis data...</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer Sidebar -->
             <div class="sidebar-footer">
                 <a href="https://github.com/adefauzan/Telusur-Hindia" target="_blank" class="footer-link">
                     <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
@@ -329,7 +331,7 @@
             </div>
         </aside>
 
-        <!-- Container Peta -->
+        <!-- Area Peta -->
         <div id="map-container">
             <button id="toggle-sidebar" title="Sembunyikan/Tampilkan Panel">
                 <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -342,9 +344,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // 1. Inisialisasi Peta
-        const streetView = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' });
-        const satelliteView = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri' });
+        // --- LOGIKA APLIKASI ---
+        const streetView = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+            attribution: '&copy; OpenStreetMap contributors' 
+        });
+        const satelliteView = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+            attribution: 'Esri' 
+        });
 
         const map = L.map('map', {
             center: [-2.5489, 118.0149],
@@ -354,111 +360,100 @@
 
         L.control.layers({ "Peta Jalan": streetView, "Satelit": satelliteView }, null, { position: 'topright' }).addTo(map);
 
-        // 2. Elemen UI
         const apiFolderUrl = 'https://api.github.com/repos/adefauzan/Telusur-Hindia/contents/database';
         const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggle-sidebar');
         const body = document.body;
-        
         const yearSlider = document.getElementById('year-slider');
         const floatingYear = document.getElementById('floating-year');
         const searchInput = document.getElementById('search-input');
         const filterListDiv = document.getElementById('filter-list');
         const ticksContainer = document.getElementById('timeline-ticks');
-        
+
         let allMapFeatures = []; 
         let uniqueCategories = new Set();
 
-        // 3. Generasi Garis Divisi (Ticks) Tahun
         function createTicks() {
             const min = parseInt(yearSlider.min);
             const max = parseInt(yearSlider.max);
             const count = max - min;
-            
             for (let i = 0; i <= count; i++) {
                 const tick = document.createElement('div');
                 tick.className = 'tick';
-                if ((min + i) % 10 === 0 || min + i === 1903 || min + i === 1864 || min + i === 1945) {
+                const currentYear = min + i;
+                if (currentYear % 10 === 0 || [1864, 1903, 1945].includes(currentYear)) {
                     tick.classList.add('major');
                 }
                 ticksContainer.appendChild(tick);
             }
         }
 
-        // 4. Fungsi Toggle Sidebar
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             body.classList.toggle('expanded-state');
             body.classList.toggle('collapsed-state');
-            setTimeout(() => map.invalidateSize(), 300);
+            setTimeout(() => map.invalidateSize(), 400);
         });
 
-        // 5. Update Posisi Indikator Tahun
         function updateFloatingYear() {
             const val = yearSlider.value;
             const min = yearSlider.min;
             const max = yearSlider.max;
             const percent = (val - min) / (max - min) * 100;
-            
             floatingYear.innerText = val;
             floatingYear.style.left = `calc(${percent}% + (${8 - percent * 0.15}px))`;
-            
             runGlobalFilter();
         }
 
-        // 6. Ambil Data
-        fetch(apiFolderUrl)
-            .then(res => res.json())
-            .then(daftarFile => {
-                const tasks = [];
-                daftarFile.forEach(file => {
-                    if (file.name.endsWith('.geojson')) {
-                        tasks.push(fetch(file.download_url).then(r => r.json()).then(d => ({ file: file.name, data: d })));
-                    }
-                });
-                return Promise.all(tasks);
-            })
-            .then(allData => {
-                allData.forEach(item => {
-                    L.geoJSON(item.data, {
-                        style: { color: "#c0392b", weight: 2, fillOpacity: 0.3 },
-                        pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-                            radius: 7, fillColor: "#c0392b", color: "#fff", weight: 1, fillOpacity: 0.8
-                        }),
-                        onEachFeature: (feature, layer) => {
-                            const props = feature.properties || {};
-                            const kategori = props.jenis || props.kategori || props.tipe || "Lainnya";
-                            const nama = props.nama || props.Nama || "Objek Tanpa Nama";
-                            
-                            let thnRaw = props.tahun || props.year || props.Year || props.Tahun;
-                            let tahun = thnRaw ? parseInt(thnRaw) : null;
-
-                            uniqueCategories.add(kategori);
-                            allMapFeatures.push({ layer, kategori, nama, tahun });
-
-                            let popupHtml = `<div class="popup-title">${nama}</div><table class="popup-table">`;
-                            for (let key in props) {
-                                if(key.toLowerCase() !== 'nama') popupHtml += `<tr><td class="popup-label">${key}</td><td>${props[key]}</td></tr>`;
+        function loadDatabase() {
+            fetch(apiFolderUrl)
+                .then(res => res.ok ? res.json() : Promise.reject('API Error'))
+                .then(daftarFile => {
+                    const geojsonFiles = daftarFile.filter(f => f.name.endsWith('.geojson'));
+                    return Promise.all(geojsonFiles.map(file => fetch(file.download_url).then(r => r.json())));
+                })
+                .then(allGeoData => {
+                    allGeoData.forEach(data => {
+                        L.geoJSON(data, {
+                            style: { color: "#c0392b", weight: 2, fillOpacity: 0.3 },
+                            pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+                                radius: 7, fillColor: "#c0392b", color: "#fff", weight: 1, fillOpacity: 0.8
+                            }),
+                            onEachFeature: (feature, layer) => {
+                                const props = feature.properties || {};
+                                const kategori = props.jenis || props.kategori || props.tipe || "Lainnya";
+                                const nama = props.nama || props.Nama || "Objek Tanpa Nama";
+                                let thnRaw = props.tahun || props.year || props.Year || props.Tahun;
+                                let tahun = thnRaw ? parseInt(thnRaw) : null;
+                                uniqueCategories.add(kategori);
+                                allMapFeatures.push({ layer, kategori, nama, tahun });
+                                let popupHtml = `<div class="popup-title">${nama}</div><table class="popup-table">`;
+                                for (let key in props) {
+                                    if(key.toLowerCase() !== 'nama') {
+                                        popupHtml += `<tr><td class="popup-label">${key}</td><td>${props[key]}</td></tr>`;
+                                    }
+                                }
+                                layer.bindPopup(popupHtml + `</table>`, { maxWidth: 280 });
                             }
-                            layer.bindPopup(popupHtml + `</table>`, { maxWidth: 280 });
-                        }
-                    }).addTo(map);
+                        }).addTo(map);
+                    });
+                    renderFilters();
+                    updateFloatingYear();
+                })
+                .catch(err => {
+                    console.error(err);
+                    filterListDiv.innerHTML = '<p style="color:red">Database Error!</p>';
                 });
-
-                renderFilters();
-                updateFloatingYear();
-            });
+        }
 
         function runGlobalFilter() {
             const selectedYear = parseInt(yearSlider.value);
             const searchTerm = searchInput.value.toLowerCase();
             const checkedCats = Array.from(document.querySelectorAll('.filter-item input:checked')).map(i => i.value);
-
             allMapFeatures.forEach(item => {
                 const matchSearch = item.nama.toLowerCase().includes(searchTerm);
                 const matchCat = checkedCats.includes(item.kategori);
                 const matchYear = item.tahun ? (item.tahun <= selectedYear) : true;
-
                 if (matchSearch && matchCat && matchYear) {
                     if (!map.hasLayer(item.layer)) map.addLayer(item.layer);
                 } else {
@@ -469,7 +464,7 @@
 
         function renderFilters() {
             filterListDiv.innerHTML = '';
-            uniqueCategories.forEach(cat => {
+            Array.from(uniqueCategories).sort().forEach(cat => {
                 const label = document.createElement('label');
                 label.className = 'filter-item';
                 label.innerHTML = `<input type="checkbox" value="${cat}" checked> <span>${cat}</span>`;
@@ -479,9 +474,9 @@
         }
 
         createTicks();
+        loadDatabase();
         yearSlider.addEventListener('input', updateFloatingYear);
         searchInput.addEventListener('input', runGlobalFilter);
-
     </script>
 </body>
 </html>

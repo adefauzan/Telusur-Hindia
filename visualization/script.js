@@ -1,91 +1,159 @@
-// ==========================================
-// 1. PENGATURAN DASAR PETA
-// ==========================================
-// Mengatur titik tengah peta (Fokus awal ke Indonesia) dan level zoom
-const map = L.map('map').setView([-2.5489, 118.0149], 5); 
+/**
+ * script.js - Logika Database & Interaksi Peta "Telusur Hindia"
+ */
 
-// Menambahkan peta dasar (Basemap) dari OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+// 1. Inisialisasi Peta & Basemaps
+const streetView = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+    attribution: '&copy; OpenStreetMap contributors' 
+});
+const satelliteView = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+    attribution: 'Tiles &copy; Esri' 
+});
 
+const map = L.map('map', {
+    center: [-2.5489, 118.0149],
+    zoom: 5,
+    layers: [streetView]
+});
 
-// ==========================================
-// 2. KONFIGURASI FOLDER DATABASE DI GITHUB
-// ==========================================
-// Ini adalah URL khusus mesin (API) untuk melihat isi folder 'database' di repo Anda.
-// JANGAN PAKAI LINK WEB GITHUB BIASA! Pakai yang api.github.com ini:
+L.control.layers({ "Peta Jalan": streetView, "Satelit": satelliteView }, null, { position: 'topright' }).addTo(map);
+
+// 2. Variabel State
 const apiFolderUrl = 'https://api.github.com/repos/adefauzan/Telusur-Hindia/contents/database';
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.getElementById('toggle-sidebar');
+const body = document.body;
+const yearSlider = document.getElementById('year-slider');
+const floatingYear = document.getElementById('floating-year');
+const searchInput = document.getElementById('search-input');
+const filterListDiv = document.getElementById('filter-list');
+const ticksContainer = document.getElementById('timeline-ticks');
 
+let allMapFeatures = []; 
+let uniqueCategories = new Set();
 
-// ==========================================
-// 3. PROSES MEMBACA FOLDER & MENAMPILKAN PETA
-// ==========================================
-// Langkah A: Minta GitHub API untuk mengecek ada file apa saja di folder 'database'
-fetch(apiFolderUrl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Gagal membaca folder database. Pastikan repo publik dan nama folder benar.');
+// 3. Fungsi Visual: Ticks (Garis Pembagi Tahun)
+function createTicks() {
+    const min = parseInt(yearSlider.min);
+    const max = parseInt(yearSlider.max);
+    const count = max - min;
+    
+    for (let i = 0; i <= count; i++) {
+        const tick = document.createElement('div');
+        tick.className = 'tick';
+        const currentYear = min + i;
+        // Tandai garis besar setiap 10 tahun atau tahun penting
+        if (currentYear % 10 === 0 || [1864, 1903, 1945].includes(currentYear)) {
+            tick.classList.add('major');
         }
-        return response.json(); // Ubah respon menjadi format JSON (daftar file)
-    })
-    .then(daftarFile => {
-        console.log("Berhasil menemukan file di folder database:", daftarFile);
+        ticksContainer.appendChild(tick);
+    }
+}
 
-        // Langkah B: Looping (ulangi) untuk setiap file yang ditemukan di dalam folder
-        daftarFile.forEach(file => {
-            
-            // Kita filter, hanya proses file yang ujungnya ".geojson"
-            if (file.name.endsWith('.geojson')) {
-                
-                console.log(`Sedang memuat peta: ${file.name}...`);
+// 4. Fungsi Interaksi: Toggle Sidebar
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    body.classList.toggle('expanded-state');
+    body.classList.toggle('collapsed-state');
+    setTimeout(() => map.invalidateSize(), 400);
+});
 
-                // Langkah C: Ambil data mentah (RAW) dari file GeoJSON tersebut
-                // file.download_url ini adalah link raw otomatis dari GitHub
-                fetch(file.download_url)
-                    .then(res => res.json())
-                    .then(geojsonData => {
+// 5. Fungsi Logika: Update Tahun & Filter
+function updateFloatingYear() {
+    const val = yearSlider.value;
+    const min = yearSlider.min;
+    const max = yearSlider.max;
+    const percent = (val - min) / (max - min) * 100;
+    
+    floatingYear.innerText = val;
+    floatingYear.style.left = `calc(${percent}% + (${8 - percent * 0.15}px))`;
+    
+    runGlobalFilter();
+}
+
+// 6. Penarikan Data dari Database (GitHub GeoJSON)
+function loadDatabase() {
+    fetch(apiFolderUrl)
+        .then(res => res.ok ? res.json() : Promise.reject('Gagal akses database GitHub'))
+        .then(daftarFile => {
+            const geojsonFiles = daftarFile.filter(f => f.name.endsWith('.geojson'));
+            // Kita ambil semua file dalam folder database agar tergabung otomatis
+            return Promise.all(geojsonFiles.map(file => fetch(file.download_url).then(r => r.json())));
+        })
+        .then(allGeoData => {
+            allGeoData.forEach(data => {
+                L.geoJSON(data, {
+                    style: { color: "#c0392b", weight: 2, fillOpacity: 0.3 },
+                    pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+                        radius: 7, fillColor: "#c0392b", color: "#fff", weight: 1, fillOpacity: 0.8
+                    }),
+                    onEachFeature: (feature, layer) => {
+                        const props = feature.properties || {};
+                        const kategori = props.jenis || props.kategori || props.tipe || "Lainnya";
+                        const nama = props.nama || props.Nama || "Objek Tanpa Nama";
                         
-                        // Langkah D: Gambar data GeoJSON ke atas peta Leaflet
-                        L.geoJSON(geojsonData, {
-                            
-                            // Bikin gaya (warna garis/poligon) sedikit transparan biar basemap kelihatan
-                            style: function (feature) {
-                                return {
-                                    color: "#e74c3c", // Warna merah
-                                    weight: 2,        // Ketebalan garis
-                                    opacity: 0.8,
-                                    fillOpacity: 0.4
-                                };
-                            },
+                        // Ekstraksi Tahun (Snap ke Timeline)
+                        let thnRaw = props.tahun || props.year || props.Year || props.Tahun;
+                        let tahun = thnRaw ? parseInt(thnRaw) : null;
 
-                            // Bikin Pop-up saat fitur di peta diklik
-                            onEachFeature: function (feature, layer) {
-                                let popupContent = `<div style="max-height: 200px; overflow-y: auto;">`;
-                                popupContent += `<h4 style="margin:0 0 5px 0;">Sumber: ${file.name}</h4><hr style="margin:5px 0;">`;
-                                
-                                // Jika GeoJSON punya data atribut (properties), tampilkan semuanya
-                                if (feature.properties && Object.keys(feature.properties).length > 0) {
-                                    for (let key in feature.properties) {
-                                        popupContent += `<b>${key}:</b> ${feature.properties[key]}<br>`;
-                                    }
-                                } else {
-                                    popupContent += `<i>Tidak ada data atribut/metadata pada fitur ini.</i>`;
-                                }
-                                
-                                popupContent += `</div>`;
-                                layer.bindPopup(popupContent);
+                        uniqueCategories.add(kategori);
+                        allMapFeatures.push({ layer, kategori, nama, tahun });
+
+                        // Desain Popup
+                        let popupHtml = `<div class="popup-title">${nama}</div><table class="popup-table">`;
+                        for (let key in props) {
+                            if(key.toLowerCase() !== 'nama') {
+                                popupHtml += `<tr><td class="popup-label">${key}</td><td>${props[key]}</td></tr>`;
                             }
+                        }
+                        layer.bindPopup(popupHtml + `</table>`, { maxWidth: 280 });
+                    }
+                }).addTo(map);
+            });
 
-                        }).addTo(map);
-
-                    })
-                    .catch(error => console.error(`Gagal menampilkan isi dari ${file.name}:`, error));
-            }
+            renderFilters();
+            updateFloatingYear();
+        })
+        .catch(err => {
+            console.error(err);
+            filterListDiv.innerHTML = '<p style="color:red">Error Database!</p>';
         });
-    })
-    .catch(error => {
-        console.error('Error Utama:', error);
-        alert('Terjadi kesalahan saat mencoba membaca folder database dari GitHub.');
+}
+
+// 7. Filter Gabungan (Pencarian + Tahun + Kategori)
+function runGlobalFilter() {
+    const selectedYear = parseInt(yearSlider.value);
+    const searchTerm = searchInput.value.toLowerCase();
+    const checkedCats = Array.from(document.querySelectorAll('.filter-item input:checked')).map(i => i.value);
+
+    allMapFeatures.forEach(item => {
+        const matchSearch = item.nama.toLowerCase().includes(searchTerm);
+        const matchCat = checkedCats.includes(item.kategori);
+        const matchYear = item.tahun ? (item.tahun <= selectedYear) : true;
+
+        if (matchSearch && matchCat && matchYear) {
+            if (!map.hasLayer(item.layer)) map.addLayer(item.layer);
+        } else {
+            if (map.hasLayer(item.layer)) map.removeLayer(item.layer);
+        }
     });
+}
+
+// 8. Render UI Checkbox
+function renderFilters() {
+    filterListDiv.innerHTML = '';
+    const sortedCats = Array.from(uniqueCategories).sort();
+    sortedCats.forEach(cat => {
+        const label = document.createElement('label');
+        label.className = 'filter-item';
+        label.innerHTML = `<input type="checkbox" value="${cat}" checked> <span>${cat}</span>`;
+        label.querySelector('input').addEventListener('change', runGlobalFilter);
+        filterListDiv.appendChild(label);
+    });
+}
+
+// Jalankan Inisialisasi
+createTicks();
+loadDatabase();
+yearSlider.addEventListener('input', updateFloatingYear);
+searchInput.addEventListener('input', runGlobalFilter);
