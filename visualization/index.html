@@ -3,223 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colonial Tomb Archive ID - Map</title>
-    
-    <!-- 1. Tailwind CSS (Untuk styling tata letak modern) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- 2. Leaflet CSS (Wajib untuk peta) -->
+    <title>Telusur Hindia - Visualisasi Peta</title>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- 3. MarkerCluster CSS (Wajib agar clustering data terlihat rapi) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
-    <!-- 4. Google Fonts (Font 'Space Grotesk' agar terlihat futuristik) -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-
-    <!-- 5. Custom CSS (Tema Warna Hitam & Kuning) -->
-    <style>
-        /* Konfigurasi Variabel Warna */
-        :root {
-            --theme-black: #0a0a0a;
-            --theme-yellow: #fbbf24; /* Amber-400 */
-        }
-
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--theme-black);
-            overflow: hidden; /* Mencegah scroll pada layar penuh */
-        }
-
-        /* Container Peta Full Screen */
-        #map {
-            height: 100vh;
-            width: 100vw;
-            z-index: 1;
-            background: #1a1a1a;
-        }
-
-        /* Efek Kaca (Glassmorphism) untuk Panel Info */
-        .glass-panel {
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Styling Scrollbar biar hitam */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--theme-yellow); }
-
-        /* Kustomisasi Popup Leaflet (Kotak Info saat marker diklik) */
-        .leaflet-popup-content-wrapper {
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid var(--theme-yellow);
-            border-radius: 0px;
-            color: #fff;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        .leaflet-popup-tip { background: var(--theme-yellow); }
-        .leaflet-popup-close-button { color: var(--theme-yellow) !important; }
-        
-        /* Tombol Link di dalam Popup */
-        .popup-link {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 12px;
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid var(--theme-yellow);
-            color: var(--theme-yellow);
-            text-decoration: none;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        .popup-link:hover {
-            background: var(--theme-yellow);
-            color: #000;
-        }
-
-        /* --- STYLE KHUSUS CLUSTER (PENGELOMPOKAN DATA) --- */
-        /* Ini membuat lingkaran angka berwarna Kuning saat di-zoom out */
-        .marker-cluster-custom {
-            background-color: rgba(251, 191, 36, 0.6);
-            border-radius: 50%;
-        }
-        .marker-cluster-custom div {
-            width: 30px;
-            height: 30px;
-            margin-left: 5px;
-            margin-top: 5px;
-            text-align: center;
-            border-radius: 50%;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: bold;
-            background-color: #fbbf24;
-            color: #000;
-            line-height: 30px;
-            border: 2px solid #000;
-            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-        }
-
-        /* --- KUSTOMISASI LAYER CONTROL (MENU PEMILIHAN DATA) --- */
-        /* Mengubah kotak putih default menjadi hitam transparan glassmorphism */
-        .leaflet-control-layers {
-            background: rgba(10, 10, 10, 0.85) !important;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(251, 191, 36, 0.3) !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
-            color: #fff !important;
-            border-radius: 0px !important;
-        }
-
-        /* Style saat menu dibuka */
-        .leaflet-control-layers-expanded {
-            padding: 12px !important;
-            font-family: 'Space Grotesk', sans-serif;
-            min-width: 180px;
-        }
-
-        /* Garis pemisah antar section (jika ada basemap & overlay) */
-        .leaflet-control-layers-separator {
-            border-top: 1px solid rgba(251, 191, 36, 0.3) !important;
-            margin: 8px 0 !important;
-        }
-
-        /* Styling teks label */
-        .leaflet-control-layers label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Efek hover pada item list */
-        .leaflet-control-layers label:hover span {
-            color: var(--theme-yellow);
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        /* Custom Checkbox/Radio (Opsional - agar browser merender input lebih gelap) */
-        .leaflet-control-layers input[type="checkbox"], 
-        .leaflet-control-layers input[type="radio"] {
-            accent-color: var(--theme-yellow);
-            margin-right: 8px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-white relative">
+<body>
 
-    <!-- 1. Elemen Utama Peta -->
+    <header class="header-web">
+        <h1>Telusur Hindia</h1>
+        <p>Visualisasi Peta Sejarah</p>
+    </header>
+
     <div id="map"></div>
 
-    <!-- 2. Panel Header & Statistik (Kiri Atas) -->
-    <div class="absolute top-4 left-4 z-[1000] w-[90%] md:w-96 flex flex-col gap-4 pointer-events-none">
-        
-        <!-- Judul -->
-        <div class="glass-panel p-6 pointer-events-auto transition-all hover:border-yellow-400">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-bold text-amber-400 tracking-widest uppercase border border-amber-400 px-2 py-0.5 rounded-sm">2025</span>
-                <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
-            </div>
-            <h1 class="text-3xl font-bold text-white leading-tight">
-                Peta Sebaran <span class="text-amber-400">Makam Tionghoa dari Era Kolonial</span>
-            </h1>
-            <p class="text-gray-400 text-sm mt-3 leading-relaxed">
-                Platform Terbuka Kolaboratif untuk Pendeteksian Makam Tionghoa Kuno Bersumber Peta Digital KITLV
-            </p>
-        </div>
-
-        <!-- Kotak Info Statistik -->
-        <div class="glass-panel p-5 pointer-events-auto">
-            <h3 class="text-amber-400 font-bold uppercase text-xs mb-3 tracking-wider">Total Digitasi</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <!-- ID ini akan diisi otomatis oleh script.js -->
-                    <div id="stat-count" class="text-2xl font-bold">-</div>
-                    <div class="text-xs text-gray-500">Hasil Digitasi</div>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold">KITLV</div>
-                    <div class="text-xs text-gray-500">Sumber Data</div>
-                </div>
-            </div>
-            <div class="mt-4 pt-4 border-t border-gray-800">
-                <!-- Tombol ini memanggil fungsi focusMap() di script.js -->
-                <button onclick="focusMap()" class="w-full bg-amber-500/10 hover:bg-amber-500 hover:text-black text-amber-400 text-sm font-bold py-2 px-4 border border-amber-500/50 transition-all duration-300 uppercase tracking-wider">
-                    Reset Pandangan
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. Panel Koordinat (Kanan Bawah) -->
-    <div class="absolute bottom-8 right-4 z-[1000] flex flex-col gap-2 pointer-events-none">
-        <div class="glass-panel p-3 pointer-events-auto">
-            <div class="text-[10px] text-amber-400 uppercase tracking-widest text-right">
-                Coordinates<br>
-                Lat: <span id="lat-display">-6.2000</span><br>
-                Lng: <span id="lng-display">106.8166</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. Bagian Script (Wajib urutannya seperti ini) -->
-    
-    <!-- A. Library Leaflet JS Utama -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <!-- B. Library MarkerCluster JS (Untuk menangani ribuan data) -->
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    
-    <!-- C. Script Buatan Kita (Koneksi ke file script.js) -->
     <script src="script.js"></script>
 
 </body>
