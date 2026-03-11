@@ -8,7 +8,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // 2. URL GitHub API untuk membaca isi folder "database"
-const githubApiUrl = 'https://api.github.com/repos/adefauzan/Telusur-Hindia/database';
+const githubApiUrl = 'https://github.com/adefauzan/Telusur-Hindia/tree/main/database';
 
 // 3. Fungsi untuk mengambil dan melooping semua file di folder tersebut
 fetch(githubApiUrl)
