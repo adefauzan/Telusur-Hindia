@@ -1,56 +1,55 @@
 // 1. Inisialisasi Peta
-// Mengatur titik tengah peta saat pertama kali dibuka. 
-// Angka [-6.2088, 106.8456] adalah koordinat Jakarta. Angka 10 adalah level zoom.
-const map = L.map('map').setView([-6.2088, 106.8456], 10);
+const map = L.map('map').setView([-6.2088, 106.8456], 10); // Default ke Jakarta
 
-// 2. Menambahkan Basemap (Peta Latar Belakang)
-// Kita pakai OpenStreetMap yang gratis dan open-source
+// Tambahkan Basemap OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// 3. Menentukan Jalur File GeoJSON
-// Karena script.js ada di folder visualization, kita pakai '../' untuk keluar, 
-// lalu masuk ke folder 'database'.
-// UBAH 'nama_file_anda.geojson' DENGAN NAMA FILE ASLI ANDA!
-const urlData = '../database/nama_file_anda.geojson';
+// 2. URL GitHub API untuk membaca isi folder "database"
+const githubApiUrl = 'https://api.github.com/repos/adefauzan/Telusur-Hindia/contents/database';
 
-// 4. Mengambil (Fetch) Data GeoJSON dan Menampilkannya
-fetch(urlData)
+// 3. Fungsi untuk mengambil dan melooping semua file di folder tersebut
+fetch(githubApiUrl)
     .then(response => {
-        // Cek apakah file berhasil ditemukan
         if (!response.ok) {
-            throw new Error('File GeoJSON tidak ditemukan. Cek lagi nama dan lokasinya!');
+            throw new Error('Gagal membaca folder database dari GitHub API.');
         }
         return response.json();
     })
-    .then(data => {
-        // Jika berhasil, masukkan data GeoJSON ke dalam peta Leaflet
-        const geojsonLayer = L.geoJSON(data, {
-            // Bagian ini untuk membuat Pop-up saat bangunan/jalan di peta diklik
-            onEachFeature: function (feature, layer) {
-                // Misalnya di GeoJSON Anda ada informasi "nama" atau "keterangan"
-                // Ganti tulisan 'nama_tempat' sesuai dengan atribut (properties) di GeoJSON Anda
-                let popupContent = "<b>Informasi:</b><br>";
+    .then(files => {
+        // Melakukan perulangan (loop) untuk setiap file yang ditemukan di folder database
+        files.forEach(file => {
+            
+            // Cek apakah file tersebut adalah file .geojson
+            if (file.name.endsWith('.geojson')) {
                 
-                // Menampilkan semua properties (informasi metadata) yang ada di GeoJSON
-                if (feature.properties) {
-                    for (let key in feature.properties) {
-                        popupContent += `<b>${key}:</b> ${feature.properties[key]}<br>`;
-                    }
-                } else {
-                    popupContent += "Tidak ada data detail.";
-                }
-                
-                layer.bindPopup(popupContent);
-            }
-        }).addTo(map);
+                // Jika ya, ambil data mentahnya menggunakan 'download_url' bawaan GitHub
+                fetch(file.download_url)
+                    .then(res => res.json())
+                    .then(geojsonData => {
+                        
+                        // Masukkan data GeoJSON tersebut ke dalam peta
+                        L.geoJSON(geojsonData, {
+                            onEachFeature: function (feature, layer) {
+                                let popupContent = `<b>File: ${file.name}</b><br><hr>`;
+                                
+                                if (feature.properties) {
+                                    for (let key in feature.properties) {
+                                        popupContent += `<b>${key}:</b> ${feature.properties[key]}<br>`;
+                                    }
+                                }
+                                layer.bindPopup(popupContent);
+                            }
+                        }).addTo(map);
 
-        // Opsional: Membuat peta otomatis zoom / fokus ke ukuran data GeoJSON Anda
-        map.fitBounds(geojsonLayer.getBounds());
+                    })
+                    .catch(err => console.error(`Gagal memuat file ${file.name}:`, err));
+            }
+        });
     })
     .catch(error => {
-        console.error('Ada masalah saat memuat peta:', error);
-        alert('Gagal memuat data GeoJSON. Pastikan membuka file lewat Live Server!');
+        console.error('Ada masalah:', error);
+        alert('Gagal membaca folder database. Pastikan koneksi internet lancar dan nama repo benar.');
     });
