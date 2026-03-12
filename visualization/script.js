@@ -107,7 +107,7 @@ async function loadDatabase() {
                     const nama = props.nama || props.Nama || "Objek Tanpa Nama";
                     
                     // Deteksi tahun (prioritas pada atribut tahun/year)
-                    let thnRaw = props.THN_PT || props.year || props.Year || props.Tahun;
+                    let thnRaw = props.tahun || props.year || props.Year || props.Tahun;
                     let tahun = thnRaw ? parseInt(thnRaw) : null;
 
                     uniqueCategories.add(kategori);
