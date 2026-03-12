@@ -103,7 +103,7 @@ async function loadDatabase() {
                 onEachFeature: (feature, layer) => {
                     const props = feature.properties || {};
                     // Deteksi kategori/jenis objek
-                    const kategori = props.jenis || props.kategori || props.tipe || "Lainnya";
+                    const kategori = props.JENISOB || props.kategori || props.tipe || "Lainnya";
                     const nama = props.nama || props.Nama || "Objek Tanpa Nama";
                     
                     // Deteksi tahun (prioritas pada atribut tahun/year)
