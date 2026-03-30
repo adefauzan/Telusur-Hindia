@@ -51,7 +51,7 @@ Proses kontribusi secara umum terdiri dari:
 
 Untuk menjaga konsistensi dan kualitas data, harap ikuti standar berikut:
 
-  ***Format Data:**
+  **Format Data:**
 
     * Data vektor (hasil ekstraksi fitur) harus dalam format**GeoJSON (`.geojson`)**.
     
@@ -59,7 +59,7 @@ Untuk menjaga konsistensi dan kualitas data, harap ikuti standar berikut:
 
     * Standar_Penamaan_File mengikuti jenis kategorinya, Contoh: Makam_Kuno, Jalan_Kuno**.
     
-  ***Data Atribut:**
+  **Data Atribut:**
     
     * Feature ID ditulis dengan fid, tipe data int64
     * Tahun Peta ditulis dengan THN_PT, tipe data int32
