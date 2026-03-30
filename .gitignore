@@ -1,0 +1,20 @@
+# 1. Abaikan semua secara default
+*
+
+# 2. Izinkan file sistem & tampilan (UI)
+!.gitignore
+!README.md
+!index.html
+!style.css
+!script.js
+!aset/
+!aset/**
+
+# 3. Izinkan Folder Data, tapi HANYA file .geojson
+!data/
+data/*
+!data/**/*.geojson
+
+# 4. Buang file sampah
+.DS_Store
+Thumbs.db
