@@ -70,7 +70,7 @@ Untuk menjaga konsistensi dan kualitas data, harap ikuti standar berikut:
     * Afdeeling ditulis dengan AFDL, tipe data string
     * Jenis Object ditulis dengan JENISOB, tipe data string
 
-    * Standar_Penamaan_File mengikuti jenis kategorinya, Contoh: Makam_Kuno, Jalan_Kuno**.
+  **Standar_Penamaan_File mengikuti jenis kategorinya, Contoh: Makam_Kuno, Jalan_Kuno**
     
   
 
