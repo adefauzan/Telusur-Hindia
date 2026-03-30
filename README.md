@@ -1,26 +1,28 @@
 # Telusur Hindia
-Mengubah Sejarah Kertas menjadi Data Terbuka untuk Semua
 
+<p align="center">
+  <img src="aset/Dieng_Junghuhn.jpg" width="100%" alt="Telusur Hindia Banner">
+</p>
 
-## 📜 Tentang Proyek Ini
+## Tentang Proyek Ini
 
-Proyek Digitasi Peta Kuna adalah sebuah inisiatif komunitas yang bertujuan untuk mendigitalkan (georeferencing dan ekstraksi fitur) peta-peta kuno dari sumber terbuka dan non-komersial.
+Proyek inisiatfi berbentuk komunitas terbuka-terbatas yang bersifat kerja kolektif. Tujuan proyek ini adalah melakukan georeferensi/georektifikasi serta digitasi objek kuno berdasarkan sumber dokumen yang dipandang sebagai pontesi objek diduga cagar budaya.
 
-Tujuan kami adalah menciptakan sebuah platform di mana siapa saja dapat berkontribusi untuk melestarikan warisan kartografi dan membuatnya dapat diakses secara bebas bagi sejarawan, peneliti, pendidik, dan masyarakat umum. Data yang dihasilkan dari proyek ini sepenuhnya milik publik dan dapat digunakan untuk tujuan apa pun.
+Proyek ini dilakukan secara sukarela dan bersifat non-komersil.
 
-## ✨ Prinsip Utama
+## Prinsip Utama
 
 Kami berpegang pada beberapa prinsip utama:
 
-1. **Keterbukaan (Openness):** Seluruh data hasil digitasi bersifat terbuka. Proses kerja dan diskusi dilakukan secara transparan.
-2. **Kolaborasi (Collaboration):** Proyek ini hidup dari kontribusi banyak orang. Kami mendorong kerja sama dan saling membantu.
+1. **Keterbukaan:** Seluruh data hasil digitasi bersifat terbuka. Proses kerja dan diskusi dilakukan secara transparan.
+2. **Kolaborasi:** Proyek ini hidup dari kontribusi banyak orang. Kami mendorong kerja sama dan saling membantu.
 3. **Non-Komersial:** Kami hanya menggunakan peta sumber yang bebas dari batasan hak cipta komersial dan ditujukan untuk kepentingan publik.
 4. **Akurasi dan Kualitas:** Kami berupaya untuk menghasilkan data geospasial yang seakurat mungkin sesuai dengan peta sumbernya.
 5. **Penghargaan pada Sumber:** Setiap data yang dihasilkan wajib menyertakan metadata yang jelas mengenai sumber peta aslinya.
 
-## 🚀 Cara Berkontribusi
+## Cara Menjadi Kontributor
 
-Setiap orang dipersilakan untuk berkontribusi\! Berikut adalah langkah-langkah dan aturan umum untuk menjadi kontributor:
+Setiap orang/kelompok dipersilakan untuk berkontribusi\! Berikut adalah langkah-langkah dan aturan umum untuk menjadi kontributor:
 
 ### 1\. Sumber Peta (Aturan Wajib)
 
@@ -32,7 +34,7 @@ Sebelum memulai, pastikan peta yang akan Anda digitasi memenuhi kriteria berikut
 
   ***Memiliki Resolusi Cukup:** Peta harus memiliki resolusi yang memadai agar detail seperti teks, jalan, dan batas wilayah dapat terlihat jelas untuk proses digitasi.
 
-### 2\. Proses Digitasi
+### 2\. Proses Georeferensi dan Digitasi
 
 Proses kontribusi secara umum terdiri dari:
 
@@ -44,6 +46,7 @@ Proses kontribusi secara umum terdiri dari:
    * Nama-nama tempat (toponimi)
    * Sungai dan garis pantai
    * Lokasi bangunan bersejarah atau fasilitas umum
+   * atau objek lainnya.
 3. **Pengisian Metadata:** Setiap data yang diserahkan **wajib** menyertakan informasi (metadata) yang lengkap.
 
 ### 3\. Standar Teknis
@@ -56,8 +59,7 @@ Untuk menjaga konsistensi dan kualitas data, harap ikuti standar berikut:
 
     * Peta yang sudah ter-georeferensi (jika ada) harus dalam format**GeoTIFF (`.tif`)**.
 
-  ***Sistem Proyeksi Koordinat (CRS):** Semua data harus menggunakan **WGS 84 (EPSG:4326)**. Ini adalah standar global yang paling umum digunakan.
-
+  ***Sistem Proyeksi Koordinat (CRS):** Semua data harus menggunakan **WGS 84 (EPSG:4326)**.
   ***Struktur Folder dan Penamaan File:**
 
     * Buat folder baru untuk setiap peta dengan format:`[TahunPeta]_[NamaSingkatLokasi]` (Contoh: `1885_Batavia_Centrum`).
@@ -86,7 +88,7 @@ Untuk menjaga konsistensi dan kualitas data, harap ikuti standar berikut:
 6. Buka **Pull Request (PR)** ke branch `main` repositori ini.
 7. Pada deskripsi Pull Request, jelaskan secara singkat peta apa yang Anda digitasi, sumbernya, dan fitur apa saja yang diekstraksi. Tim akan meninjau kontribusi Anda.
 
-## ⚖️ Aturan Perilaku Komunitas
+## Aturan Perilaku Komunitas
 
 Kami ingin komunitas ini menjadi tempat yang aman dan ramah bagi semua orang.
 
@@ -98,23 +100,10 @@ Kami ingin komunitas ini menjadi tempat yang aman dan ramah bagi semua orang.
 
   ***Nol Toleransi untuk Pelecehan:** Pelecehan dalam bentuk apa pun tidak akan ditoleransi.
 
-## 📄 Lisensi dan Penggunaan Data
-
-  ***Peta Sumber:** Seperti yang disebutkan di atas, kontributor bertanggung jawab untuk memastikan peta sumber bebas dari batasan hak cipta yang menghalangi proyek ini.
-
-  ***Data Hasil Digitasi:** Seluruh data hasil digitasi (file `.geojson`, `.tif`, dll.) yang ada di repositori ini dirilis di bawah lisensi **Creative Commons Zero (CC0) / Domain Publik**.
-
-Ini berarti:
-
-> **Siapa pun dapat menyalin, memodifikasi, mendistribusikan, dan menggunakan data ini untuk tujuan apa pun (termasuk komersial) tanpa perlu meminta izin dan tanpa atribusi.**
-
-Kami memilih lisensi ini untuk memastikan data dapat dimanfaatkan seluas-luasnya oleh masyarakat tanpa hambatan apa pun.
-
 ## 💬 Hubungi Kami & Diskusi
 
 Punya pertanyaan, ide, atau butuh bantuan?
 
 * Untuk diskusi terkait data atau masalah teknis, silakan buka **"Issue"** di repositori GitHub ini.
-* Untuk diskusi umum komunitas, Anda bisa bergabung dengan [Platform Diskusi Komunitas, misal: Server Discord atau Grup Telegram - *Tautkan di sini*].
 
 Terima kasih atas minat dan kontribusi Anda dalam melestarikan sejarah untuk generasi mendatang\!
