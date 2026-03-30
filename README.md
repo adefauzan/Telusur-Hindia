@@ -18,17 +18,17 @@ Kami berpegang pada beberapa prinsip utama:
 2. **Kolaborasi:** Proyek ini hidup dari kontribusi banyak orang. Kami mendorong kerja sama dan saling membantu.
 3. **Non-Komersial:** Kami hanya menggunakan peta sumber yang bebas dari batasan hak cipta komersial dan ditujukan untuk kepentingan publik.
 4. **Akurasi dan Kualitas:** Kami berupaya untuk menghasilkan data geospasial yang seakurat mungkin sesuai dengan peta sumbernya.
-5. **Penghargaan pada Sumber:** Setiap data yang dihasilkan wajib menyertakan metadata yang jelas mengenai sumber peta aslinya.
+5. **Penghargaan pada Sumber:** Setiap data yang dihasilkan wajib menyertakan sumber data yang jelas mengenai sumber peta aslinya.
 
 ## Cara Menjadi Kontributor
 
 Setiap orang/kelompok dipersilakan untuk berkontribusi\! Berikut adalah langkah-langkah dan aturan umum untuk menjadi kontributor:
 
-### 1\. Sumber Peta (Aturan Wajib)
+### 1\. Sumber Peta
 
 Sebelum memulai, pastikan peta yang akan Anda digitasi memenuhi kriteria berikut:
 
-  ***Berasal dari Sumber Terbuka:** Peta harus berasal dari arsip publik, perpustakaan universitas, museum, atau repositori online yang secara eksplisit menyatakan kontennya bebas digunakan ulang. Contoh: Arsip Nasional, Perpustakaan Nasional, Wikimedia Commons, Internet Archive.
+  ***Berasal dari Sumber Terbuka:** Peta harus berasal dari arsip publik, perpustakaan universitas, museum, atau repositori online yang secara eksplisit menyatakan kontennya bebas digunakan ulang dengan Contoh KITLV
 
   ***Non-Komersial & Bebas Hak Cipta:** Pastikan tidak ada batasan hak cipta yang melarang proses digitasi dan distribusi ulang. **Kontributor bertanggung jawab penuh untuk memverifikasi status lisensi peta sumber.** Jika ragu, jangan gunakan peta tersebut.
 
@@ -47,7 +47,6 @@ Proses kontribusi secara umum terdiri dari:
    * Sungai dan garis pantai
    * Lokasi bangunan bersejarah atau fasilitas umum
    * atau objek lainnya.
-3. **Pengisian Metadata:** Setiap data yang diserahkan **wajib** menyertakan informasi (metadata) yang lengkap.
 
 ### 3\. Standar Teknis
 
@@ -56,37 +55,35 @@ Untuk menjaga konsistensi dan kualitas data, harap ikuti standar berikut:
   ***Format Data:**
 
     * Data vektor (hasil ekstraksi fitur) harus dalam format**GeoJSON (`.geojson`)**.
+    
+    * Sistem Proyeksi Koordinat (CRS):** Semua data harus menggunakan **WGS 84 (EPSG:4326)**.
 
-    * Peta yang sudah ter-georeferensi (jika ada) harus dalam format**GeoTIFF (`.tif`)**.
+    * Standar_Penamaan_File mengikuti jenis kategorinya, Contoh: Makam_Kuno, Jalan_Kuno**.
+    
+  ***Data Atribut:**
+    
+    * Feature ID ditulis dengan fid, tipe data int64
+    * Tahun Peta ditulis dengan THN_PT, tipe data int32
+    * Jenis Peta ditulis dengan JNS_PT, tipe data string
+    * Root Mean Square Error ditulis dengan RMSE, tipe data decimal
+    * Resident atau Residence ditulis dengan RSDNT, tipe data string
+    * squareMeter atau akurasi ditulis dengan sqM/Akurasi, tipe data decimal
+    * Afdeeling ditulis dengan AFDL, tipe data string
+    * Jenis Object ditulis dengan JENISOB, tipe data string
 
-  ***Sistem Proyeksi Koordinat (CRS):** Semua data harus menggunakan **WGS 84 (EPSG:4326)**.
-  ***Struktur Folder dan Penamaan File:**
-
-    * Buat folder baru untuk setiap peta dengan format:`[TahunPeta]_[NamaSingkatLokasi]` (Contoh: `1885_Batavia_Centrum`).
-
-    * Nama file harus deskriptif:`[TahunPeta]_[NamaPeta]_[JenisFitur].geojson` (Contoh: `1885_Batavia_Residency_Jalan.geojson`).
-
-  ***Atribut Metadata (Wajib di dalam file atau deskripsi):**
-
-    *`judul_peta`: Judul asli dari peta.
-
-    *`tahun_terbit`: Tahun peta dibuat atau diterbitkan.
-
-    *`sumber_peta`: URL atau nama institusi tempat peta diperoleh.
-
-    *`pembuat_peta`: Nama kartografer atau penerbit asli (jika diketahui).
-
-    *`nama_kontributor`: Nama atau username Anda.
+    * Standar_Penamaan_File mengikuti jenis kategorinya, Contoh: Makam_Kuno, Jalan_Kuno**.
+    
+  
 
 ### 4\. Alur Kerja Pengiriman Kontribusi (via GitHub)
 
 1. **Fork** repositori ini.
-2. Buat **Branch** baru untuk pekerjaan Anda (`git checkout -b fitur/digitasi-peta-batavia-1885`).
+2. Buat **Branch** baru untuk pekerjaan Anda, contoh (`git checkout -b fitur/digitasi-peta-batavia-1885`).
 3. Tambahkan file hasil digitasi Anda ke dalam folder yang sesuai.
 4. **Commit** perubahan Anda dengan pesan yang jelas.
 5. **Push** ke branch Anda di fork Anda.
 6. Buka **Pull Request (PR)** ke branch `main` repositori ini.
-7. Pada deskripsi Pull Request, jelaskan secara singkat peta apa yang Anda digitasi, sumbernya, dan fitur apa saja yang diekstraksi. Tim akan meninjau kontribusi Anda.
+7. Pada deskripsi Pull Request, jelaskan secara singkat peta apa yang Anda digitasi, sumbernya, dan fitur apa saja yang diekstraksi. Kontributor lain akan meninjau kontribusi Anda.
 
 ## Aturan Perilaku Komunitas
 
