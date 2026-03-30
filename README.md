@@ -101,5 +101,6 @@ Kami ingin komunitas ini menjadi tempat yang aman dan ramah bagi semua orang.
 Punya pertanyaan, ide, atau butuh bantuan?
 
 * Untuk diskusi terkait data atau masalah teknis, silakan buka **"Issue"** di repositori GitHub ini.
+* Diskusi lainnya dapat memanfaatkan halaman ***Discussions***.
 
 Terima kasih atas minat dan kontribusi Anda dalam melestarikan sejarah untuk generasi mendatang\!
