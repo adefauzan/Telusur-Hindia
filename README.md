@@ -45,7 +45,6 @@ Proses kontribusi secara umum terdiri dari:
    * Batas administratif (desa, distrik, provinsi)
    * Nama-nama tempat (toponimi)
    * Sungai dan garis pantai
-   * Lokasi bangunan bersejarah atau fasilitas umum
    * atau objek lainnya.
 
 ### 3\. Standar Teknis
